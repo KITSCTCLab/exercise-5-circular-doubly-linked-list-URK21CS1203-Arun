@@ -12,21 +12,86 @@ class DoublyCircularLinkedList:
 
     def add_at_tail(self, data) -> bool:
         # Write code here
-
+        temp = Node()
+        temp.data = data
+        temp.prev = end
+        temp.next = None
+        if end == None:
+            front = temp
+        else:
+            end.next = temp
+        end = temp
+        if end==temp:
+            return True
+        else:
+            return False
+       
+        
     def add_at_head(self, data) -> bool:
         # Write code here
-
+        temp=Node()
+        temp.data=data
+        temp.previous=None
+        temp.next=front
+        if front==None:
+            end=temp
+        else:
+            front.previous=temp
+        front=temp
+        if front==temp:
+            return True
+        else:
+            return False
+        
+        
     def add_at_index(self, index, data) -> bool:
         # Write code here
+        temp=Node()
+        temp.data=data
+        temp.previous=index
+        temp.next=index.next
+        index.next=temp
+        if index.next==None:
+            end=temp
+        if end==temp:
+            return True
+        else:
+            return False
 
+        
     def get(self, index) -> int:
         # Write code here
+        if index!=None:
+            return index.data
+        else:
+            return -1
 
+        
     def delete_at_index(self, index) -> bool:
         # Write code here
+        temp=Node()
+        if index.previous==None:
+            front=index.next
+            front.previous=None
+        elif index.next==None:
+            end=index.previous
+            end.next=None
+        else:
+            index.previous.next=index.next
+            index.next.previous=index.previous
+        temp.remove(index)
+        if index.previous!=None:
+            return True
+        else:
+            return False
 
+        
     def get_previous_next(self, index) -> list:
         # Write code here
+        index=front
+        while(index!=None):
+            return index.data
+            index=index.next
 
 
 # Do not change the following code
