@@ -7,111 +7,106 @@ class Node:
 
 class DoublyCircularLinkedList:
     def __init__(self):
-        self.head = None
         self.count = 0
+        self.front = None
+        self.end = None
 
     def add_at_tail(self, data) -> bool:
         # Write code here
-        newNode = Node(data);    
-        if(self.head == None):    
-            self.head = self.tail = newNode;    
-            self.head.previous = None;   
-            self.tail.next = None;    
-        else:    
-            self.tail.next = newNode;    
-            newNode.previous = self.tail;   
-            self.tail = newNode;    
-            self.tail.next = None;   
+        new_node = Node(data)
+        if self.count > 0:
+            new_node.previous = self.end
+            self.end.next = new_node
+            self.head.previous = new_node
+            new_node.next = self.head
+        else:
+            self.head = new_node
+        self.end = new_node
+        self.count += 1
+        return True  
         
     def add_at_head(self, data) -> bool:
         # Write code here
-        newNode = Node(data)
-         if(self.head == None):
-            self.head = newNode
-            return
-         else:
-            self.head.prev = newNode
-            newNode.next = self.head
-            self.head = newNode
+        new_node = Node(data)
+        if self.count > 0:
+            new_node.next = self.head
+            new_node.previous = self.end
+            self.head.previous = new_node
+            self.end.next = new_node
+        else:
+            self.end = new_node
+        self.head = new_node
+        self.count += 1
+        return True
         
         
     def add_at_index(self, index, data) -> bool:
         # Write code here
-        newNode = Node(data)
-        if(position < 1):
-            print("\nposition should be >= 1.")
-        elif (position == 1):
-            newNode.next = self.head
-            self.head.previous = newNode
-            self.head = newNode
-        else:    
-            temp = self.head
-                for i in range(1, position-1):
-                    if(temp != None):
-                        temp = temp.next   
-    
-                if(temp != None):
-                    newNode.next = temp.next
-                    newNode.previous = temp
-                    temp.next = newNode  
-                    if (newNode.next != None):
-                        newNode.next.previous = newNode
-                else:
-                    print("\nThe previous node is null.")
+        if index < 0 or index >= self.count:
+            return False
+        if index == 0:
+            return self.add_at_head(data)
+        if index == self.count:
+            return self.add_at_tail(data)
+        
+        new_node = Node(data)
+        curr_node = self.head
+        for i in range(index):
+            curr_node = curr_node.next
+        new_node.previous = curr_node.previous
+        new_node.next = curr_node
+        curr_node.previous.next = new_node
+        curr_node.previous = new_node
+        self.count += 1
+        return True
 
         
     def get(self, index) -> int:
         # Write code here
-        temp = self.head
-        found = 0
-        i = 0
-        if(temp != None):
-            while (temp != None):
-                i += 1
-                if(temp.data == searchValue):
-                    found += 1
-                    break
-                temp = temp.next
-            if(found == 1):
-                print(searchValue,"is found at index =", i)
-            else:
-                print(searchValue,"is not found in the list.")
-        else:
-            print("The list is empty.")
+        if index < 0 or index >= self.count:
+            return -1
+        curr_node = self.head
+        for i in range(index):
+            curr_node = curr_node.next
+        return curr_node.data
 
         
     def delete_at_index(self, index) -> bool:
         # Write code here
-        if(position < 1):
-            print("\nposition should be >= 1.")
-        elif (position == 1 and self.head != None):
-            nodeToDelete = self.head
-            self.head = self.head.next
-            nodeToDelete = None
-            if (self.head != None):
-                self.head.prev = None
-        else:    
+        if index < 0 or index >= self.count:
+            return False
+        if index == 0:
             temp = self.head
-            for i in range(1, position-1):
-                if(temp != None):
-                    temp = temp.next   
-        
-            if(temp != None and temp.next != None):
-                nodeToDelete = temp.next
-                temp.next = temp.next.next
-                if(temp.next.next != None):
-                    temp.next.next.prev = temp.next  
-                    nodeToDelete = None 
-            else:
-                print("\nThe node is already null.")
+            temp.next.previous = self.end
+            self.end.next = temp.next
+            self.head = temp.next
+            self.count -= 1
+            return True
+        if index == self.count - 1:
+            temp = self.end
+            self.head.previous = temp.previous
+            temp.previous.next = self.head
+            self.end = temp.previous
+            self.count -= 1
+            return True
+       
+        curr_node = self.head
+        for ind in range(index):
+            curr_node = curr_node.next
+        curr_node.previous.next = curr_node.next
+        curr_node.next.previous = curr_node.previous
+        self.count -= 1
+        return True
 
         
     def get_previous_next(self, index) -> list:
         # Write code here
-        index = front
-        while(index != None):
-            return index.data
-            index = index.next
+        if index < 0 or index >= self.count:
+            return -1
+        curr_node = self.head
+        for ind in range(index):
+            curr_node = curr_node.next
+        return [curr_node.previous.data, curr_node.next.data]
 
 
 # Do not change the following code
